@@ -13,7 +13,7 @@ defmodule RocketpayWeb.Router do
     post "/users", UsersController, :create
   end
 
-  scope "/api/swagger" do
+  scope "/" do
     forward "/", PhoenixSwagger.Plug.SwaggerUI,
       otp_app: :rocketpay,
       swagger_file: "swagger.json"

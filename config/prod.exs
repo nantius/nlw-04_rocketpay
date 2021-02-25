@@ -19,11 +19,11 @@ config :logger, level: :info
 config :rocketpay, RocketpayWeb.Endpoint,
   http: [port: {:system, "PORT"}], # Possibly not needed, but doesn't hurt
   url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443],
+  cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
   server: true
-  # cache_static_manifest: "priv/static/cache_manifest.json"
 
-  config :rocketpay, Rocketpay.Repo,
+config :rocketpay, Rocketpay.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
   ssl: true,
