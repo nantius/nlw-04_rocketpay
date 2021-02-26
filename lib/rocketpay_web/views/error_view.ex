@@ -1,6 +1,18 @@
 defmodule RocketpayWeb.ErrorView do
   use RocketpayWeb, :view
 
+  defp translate_errors(changeset) do
+    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+      Enum.reduce(opts, msg, fn {key, value}, acc ->
+        String.replace(acc, "%{#{key}}", to_string(value))
+      end)
+    end)
+  end
+
+  def render("400.json", %{result: %Ecto.Changeset{} = changeset}) do
+    %{message: translate_errors(changeset)}
+  end
+
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
   # def render("500.json", _assigns) do

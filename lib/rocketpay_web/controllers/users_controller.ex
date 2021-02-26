@@ -2,8 +2,9 @@ defmodule RocketpayWeb.UsersController do
   use RocketpayWeb, :controller
   use PhoenixSwagger
 
-
   alias Rocketpay.User
+
+  action_fallback RocketpayWeb.FallbackController
 
   swagger_path :create do
     post("/api/users")
@@ -24,9 +25,11 @@ defmodule RocketpayWeb.UsersController do
   end
 
   def create(conn, params) do
-    params
-    |> Rocketpay.create_user()
-    |> handle_response(conn)
+    with {:ok, %User{} = user} <- Rocketpay.create_user(params) do
+      conn
+      |> put_status(:created)
+      |> render("create.json", user: user)
+    end
   end
 
   def swagger_definitions do
@@ -47,16 +50,11 @@ defmodule RocketpayWeb.UsersController do
     }
   end
 
-  defp handle_response({:ok, %User{} = user}, conn) do
-    conn
-    |> put_status(:created)
-    |> render("create.json", user: user)
-  end
+  # defp handle_response({:ok, %User{} = user}, conn) do
+  #   conn
+  #   |> put_status(:created)
+  #   |> render("create.json", user: user)
+  # end
 
-  defp handle_response({:error, reason}, conn) do
-    conn
-    |> put_status(:bad_request)
-    |> put_view(RocketpayWeb.ErrorView)
-    |> render("400.json", reason: reason)
-  end
+  # defp handle_response({:error, _result} = error, _conn), do: error
 end
