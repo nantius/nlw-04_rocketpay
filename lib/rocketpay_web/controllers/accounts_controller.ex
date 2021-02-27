@@ -15,6 +15,14 @@ defmodule RocketpayWeb.AccountsController do
     end
   end
 
+  def withdraw(conn, params) do
+    with {:ok, %Account{} = account} <- Rocketpay.withdraw(params) do
+      conn
+      |> put_status(:created)
+      |> render("update.json", account: account)
+    end
+  end
+
   swagger_path :deposit do
     post("/api/accounts/:id/deposit")
     produces ("application/json")
@@ -22,30 +30,23 @@ defmodule RocketpayWeb.AccountsController do
     description("User creation")
 
     parameters do
-      name     :body, :string, "Leonardo Spuldar",       required: true
-      nickname :body, :string, "spdleo",                 required: true
-      email    :body, :string, "spuldardev@hotmail.com", required: true
-      password :body, :string, "123456",                 required: true
-      age      :body, :integer, 27,                      required: true
+      value    :body, :string, "50.0",                                      required: true
+      id       :query, :string, "adauhdsua1236-2371237isahd-2173y273y2",    required: true
     end
 
-    response 200, "ok", Schema.ref(:User)
-    response 400, "Client Error"
+    response 200, "ok", Schema.ref(:Account)
+    response 400, "Bad request"
   end
 
   def swagger_definitions do
     %{
-      User:
+      Account:
         swagger_schema do
-          title("User")
-          description("A user of the application")
+          title("Account")
+          description("An account linked to an User")
 
           properties do
-            name(:string, "Users name", required: true)
-            age(:integer, "Users age", required: true)
-            email(:string, "Users email", required: true)
-            nickname(:string, "Users nickname", required: true)
-            password(:string, "Users password", required: true)
+            balance(:decimal, "Account balance", required: true)
           end
         end
     }

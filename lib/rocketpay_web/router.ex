@@ -16,11 +16,11 @@ defmodule RocketpayWeb.Router do
     post "/accounts/:id/withdraw", AccountsController, :withdraw
   end
 
-  # scope "/" do
-  #   forward "/", PhoenixSwagger.Plug.SwaggerUI,
-  #     otp_app: :rocketpay,
-  #     swagger_file: "swagger.json"
-  # end
+  scope "/" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI,
+      otp_app: :rocketpay,
+      swagger_file: "swagger.json"
+  end
 
   def swagger_info do
     %{
@@ -48,6 +48,7 @@ defmodule RocketpayWeb.Router do
       produces: ["application/json"],
       tags: [
         %{name: "Users", description: "User resources"},
+        %{name: "Accounts", description: "User Accounts"},
       ]
     }
   end
