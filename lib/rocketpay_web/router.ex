@@ -11,13 +11,16 @@ defmodule RocketpayWeb.Router do
     # get "/:filename", WelcomeController, :index
 
     post "/users", UsersController, :create
+
+    post "/accounts/:id/deposit", AccountsController, :deposit
+    post "/accounts/:id/withdraw", AccountsController, :withdraw
   end
 
-  scope "/" do
-    forward "/", PhoenixSwagger.Plug.SwaggerUI,
-      otp_app: :rocketpay,
-      swagger_file: "swagger.json"
-  end
+  # scope "/" do
+  #   forward "/", PhoenixSwagger.Plug.SwaggerUI,
+  #     otp_app: :rocketpay,
+  #     swagger_file: "swagger.json"
+  # end
 
   def swagger_info do
     %{
