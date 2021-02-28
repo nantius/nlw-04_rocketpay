@@ -3,6 +3,7 @@ defmodule RocketpayWeb.AccountsController do
   use PhoenixSwagger
 
   alias Rocketpay.Account
+  alias Rocketpay.Accounts.Transactions.Response, as: TransactionResponse
 
   action_fallback RocketpayWeb.FallbackController
 
@@ -20,6 +21,14 @@ defmodule RocketpayWeb.AccountsController do
       conn
       |> put_status(:created)
       |> render("update.json", account: account)
+    end
+  end
+
+  def transaction(conn, params) do
+    with {:ok, %TransactionResponse{} = transaction} <- Rocketpay.transaction(params) do
+      conn
+      |> put_status(:ok)
+      |> render("transaction.json", transaction: transaction)
     end
   end
 
