@@ -42,3 +42,7 @@ config :rocketpay, :phoenix_swagger,
       endpoint: RocketpayWeb.Endpoint
     ]
   }
+
+config :rocketpay, :basic_auth,
+  username: "banana",
+  password: "nanica123"
